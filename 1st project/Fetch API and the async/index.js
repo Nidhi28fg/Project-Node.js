@@ -4,6 +4,8 @@
 // Axios is a JavaScript library, so you need to add it to your project.  npm install axios
 // While both get data, Axios often offers more features and easier ways to handle things like errors.  
 // Think of fetch as a basic tool, and Axios as a more advanced, feature-rich version.
+// Normally, when you get data from the internet, you might need to take extra steps to turn it into a usable JSON format. 
+//Axios handles this automatically, making it easier to work with the data you receive.  It simplifies the process, saving you time and effort.
 
 
 // Using Fetch API with.then
