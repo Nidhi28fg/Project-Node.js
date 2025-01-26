@@ -80,3 +80,30 @@ async function main() {
 }
 
 main(); // Calls the second main function.
+
+
+
+
+
+//how to update body and header 
+
+const response = await axios.post(
+    "https://httpdump.app/dumps/c8ad7fcb-c9e7-44d9-8660-9945253fdb34?a=b",
+    {
+        username: "harkirat",
+    },
+    {
+        headers: {
+            Authorization: "Bearer 123",
+        },
+    }
+);
+
+
+// In an HTTP GET request, the convention is not to send a request body. GET requests are primarily designed to retrieve data and typically send parameters through the URL, either as query strings or path parameters.
+const response = await axios.get("https://httpdump.app/dumps/c8ad7fcb-c9e7-44d9-8660-9945253fdb34?a=b&username=harkirat", {
+    headers: {
+        Authorization: "Bearer 123",
+    },
+});
+
