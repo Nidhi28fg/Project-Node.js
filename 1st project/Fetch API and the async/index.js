@@ -1,3 +1,11 @@
+//different between fetch and axios
+//Both are tools used to get data from the internet, like retrieving information from a website.  
+// fetch is a built-in browser feature, meaning it's already available in your web browser without needing extra code. 
+// Axios is a JavaScript library, so you need to add it to your project.  
+// While both get data, Axios often offers more features and easier ways to handle things like errors.  
+// Think of fetch as a basic tool, and Axios as a more advanced, feature-rich version.
+
+
 // Using Fetch API with.then
 function main() {
     fetch("https://sum-server.100xdevs.com/todos")
@@ -28,6 +36,7 @@ main();
 
 // The first part (commented out) uses the Fetch API to request data from a URL.
 // It waits for the response and processes it using .then(), an older way of handling promises.
+// fetch take defaulte mothode get 
 
 
 //Async/Await:
@@ -35,3 +44,37 @@ main();
 //The second part defines an async function called main.
 // It uses await to handle the Fetch call, simplifying the syntax and making it easier to read.
 // It fetches data, then converts the response to JSON and logs the length of the  todos array
+
+
+
+async function main() {
+  const response = await axios.get("https://sum-server.100xdevs.com/todos");
+  console.log(response.data.todos.length);
+}
+
+main();
+//Fetch is like a basic, built-in ordering system – simple to use but not as fancy. 
+//Axios is like a more advanced app with extra features, making things easier for more complex orders. 
+
+
+
+//How to use other method of Node.js 
+const axios = require("axios");
+
+// Incorrect PUT request - missing request body
+async function main() {
+  const response = await axios.put("https://sum-server.100xdevs.com/todos", {
+    method: "PUT"
+  });
+  const json = await response.json();
+  console.log(json.todos.length);
+}
+
+
+// DELETE request
+async function main() {
+  const response = await axios.delete("https://sum-server.100xdevs.com/todos");
+  console.log(response.data.todos.length);
+}
+
+main(); // Calls the second main function.
