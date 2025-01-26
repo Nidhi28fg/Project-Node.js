@@ -1,7 +1,7 @@
 //different between fetch and axios
 //Both are tools used to get data from the internet, like retrieving information from a website.  
 // fetch is a built-in browser feature, meaning it's already available in your web browser without needing extra code. 
-// Axios is a JavaScript library, so you need to add it to your project.  
+// Axios is a JavaScript library, so you need to add it to your project.  npm install axios
 // While both get data, Axios often offers more features and easier ways to handle things like errors.  
 // Think of fetch as a basic tool, and Axios as a more advanced, feature-rich version.
 
