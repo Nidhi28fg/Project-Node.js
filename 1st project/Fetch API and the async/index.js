@@ -1,3 +1,16 @@
+// Using Fetch API with.then
+function main() {
+    fetch("https://sum-server.100xdevs.com/todos")
+    .then(async (response) => {
+        const json = await response.json();
+        console.log(json.todos.length);
+        // await response.text();
+    });
+}
+
+main();
+
+
 // Using Fetch API with async/await
 async function main() {
     try {
