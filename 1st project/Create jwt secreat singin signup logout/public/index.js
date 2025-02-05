@@ -1,10 +1,3 @@
-/*
-Assignment #1 - Creating an auth middleware
-
-Can you try creating a `middleware` called `auth` that verifies if a user is logged in and 
-ends the request early if the user isn’t logged in?
-*/
-
 // Import the express library
 const express = require("express");
 
@@ -23,13 +16,28 @@ const users = [];
 // Create a secret key for the jwt token
 const JWT_SECRET = "ilove100xdevsliveclasses";
 
+// Create a middleware function to log the request method
+function logger (req, res, next) {
+    // Log the request method to the console
+    console.log(`${req.method} request came`);
+    
+    // Call the next middleware function
+    next();
+}
+
+// Create a get request for the root route
+app.get("/", function (req, res) {
+    // Send the index.html file to the client using the res.sendFile() function
+    res.sendFile(__dirname + "/public/index.html");
+});
+
 // Create a post request for the signup route
-app.post("/signup", function (req, res) {
+app.post("/signup", logger, function (req, res) {
     // Get the username and password from the request body
     const username = req.body.username;
     const password = req.body.password;
 
-    // Check if the user is already signed up or not
+    // Check if the user is already exists in the users array or not
     if (users.find((user) => user.username === username)) {
         // Send a response to the client that the user is already signed up
         return res.json({
@@ -48,30 +56,30 @@ app.post("/signup", function (req, res) {
     // Push the username and password to the users array
     users.push({
         username: username,
-        password: password, 
+        password: password,
     });
 
     // Send a response to the client that the user has signed up successfully
     res.json({
-        message: "You have signed up successfully!",
+        message: "You are signed up successfully!",
     });
 });
 
 // Create a post request for the signin route
-app.post("/signin", function (req, res) {
+app.post("/signin", logger, function (req, res) {
     // Get the username and password from the request body
     const username = req.body.username;
     const password = req.body.password;
 
     // Find the user in the users array with the given username and password
-    const user = users.find((user) => user.username === username && user.password === password);
+    const foundUser = users.find((user) => user.username === username && user.password === password);
 
     // Check if the user is found or not
-    if (user) {
+    if (foundUser) {
         // Create a token using the jwt.sign() function
         const token = jwt.sign(
             {
-                username: user.username,
+                username, // username: foundUser.username,
             },
             JWT_SECRET
         );
@@ -89,7 +97,7 @@ app.post("/signin", function (req, res) {
     }
 });
 
-// Create a middleware called auth to verify if the user is logged in or not
+// Create a middleware function to authenticate the user
 function auth(req, res, next) {
     // Get the token from the request headers
     const token = req.headers.authorization;
@@ -100,37 +108,47 @@ function auth(req, res, next) {
         return res.json({
             message: "Token is missing!",
         });
-    } 
+    }
 
-    // Verify the token using the jwt.verify() function
-    jwt.verify(token, JWT_SECRET, function (err, decoded) {
-        // Check if the token is valid or not
-        if (err) {
-            // Send a response to the client that the token is invalid
-            return res.json({
-                message: "Unauthorized!",
-            });
-        }
+    // Use a try-catch block to handle the error
+    try {
+        // Verify the token using the jwt.verify() function
+        const decodedData = jwt.verify(token, JWT_SECRET);
 
-        // console.log(decoded);        
+        // Set the username in the request object
+        req.username = decodedData.username;
 
-        // Add the user object to the request object
-        req.user = decoded;
-
-        // Call the next middleware only if the token is valid
+        // Call the next middleware function
         next();
-    });
+    } catch (error) {
+        // Send a response to the client that the token is invalid
+        return res.json({
+            message: "Invalid token!",
+        });
+    }
 }
 
 // Create a get request for the me route
-app.get("/me", auth, function (req, res) {
-    // Get the user object from the request object
-    const user = req.user;
+app.get("/me", logger, auth, function (req, res) {
+    // Get the current user from the request object
+    const currentUser = req.username;
 
-    // Send a response to the client with the user object
-    res.json({
-        username: user.username,
-    });
+    // Find the user in the users array with the given username
+    const foundUser = users.find((user) => user.username === currentUser);
+
+    // Check if the user is found or not
+    if (foundUser) {
+        // Send a response to the client with the username and password of the user
+        return res.json({
+            username: foundUser.username,
+            password: foundUser.password,
+        });
+    } else {
+        // Send a response to the client that the user is not found
+        return res.json({
+            message: "User not found!",
+        });
+    }
 });
 
 // Start the server on port 3000
