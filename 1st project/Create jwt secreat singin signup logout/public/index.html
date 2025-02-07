@@ -4,28 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auth Website</title>
+     <!-- adding axios CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
     <script>
+    // create a function to signup the user with the given username and password
+            
         async function signup() {
             const username = document.getElementById("signup-username").value;
             const password = document.getElementById("signup-password").value;
 
             try {
+                // making a POST request to the backend to signup the user with the given username and password
                 const response = await axios.post("http://localhost:3000/signup", { username, password });
                 alert(response.data.message);
             } catch (error) {
                 alert(error.response.data.message); // Display error message from server
             }
         }
-
+// create a function to signin the user with the given username and password
         async function signin() {
+            // getting the username and password from the input fields
             const username = document.getElementById("signin-username").value;
             const password = document.getElementById("signin-password").value;
 
             try {
+                 // making a POST request to the backend to signin the user with the given username and password
                 const response = await axios.post("http://localhost:3000/signin", { username, password });
+                // getting the token from the response
                 const token = response.data.token;
+                 // storing the token in the local storage
                 localStorage.setItem("token", token);
+                 // alert the user that they are signed in
                 alert(response.data.message);
                 getUserInformation();
             } catch (error) {
@@ -33,7 +42,8 @@
             }
             getUserInformation();
         }
-
+        
+ // create a function to get the user information
         async function getUserInformation() {
             const token = localStorage.getItem("token");
             if (!token) {
