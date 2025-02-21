@@ -10,7 +10,7 @@ const {adminModel} = require("../db");
 const{adminMiddleware} = require ("../middleware/admin")
 // Import the required dependencies 
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");   //bcrypt help to create password in hash and salt
 const z = require("zod");
 const {JWT_ADMIN_PASSWORD} = require("../config")
 
